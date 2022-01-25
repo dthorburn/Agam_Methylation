@@ -1,8 +1,8 @@
-# Agam Methylation
+# *Anopheles gambiae* AgamP4-Nanopore Methylation Pipeline
 Pipelines developed for methylation calls using nanopore reads primarily for the Crisanti Lab, but this pipeline can easily be applied to other organisms. 
 
 ## Bismark-Like 
-I've developed the pipeline using [nextflow](https://www.nextflow.io/) version 20.10.0 (the most recent version on Imperial HPC; date: 15/01/22). This pipeline only uses ONT-Guppy to call modified bases, and then uses [modbam2bed](https://github.com/epi2me-labs/modbam2bed) to generate an output similar to [Bismakr](https://www.bioinformatics.babraham.ac.uk/projects/bismark/). 
+I've developed the pipeline using [nextflow](https://www.nextflow.io/) version 20.10.0 (the most recent version on Imperial HPC; date: 25/01/22). This pipeline only uses ONT-Guppy to call modified bases, and then uses [modbam2bed](https://github.com/epi2me-labs/modbam2bed) to generate an output similar to [Bismakr](https://www.bioinformatics.babraham.ac.uk/projects/bismark/). 
 
 Steps to run this pipeline:
 
