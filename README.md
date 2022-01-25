@@ -11,7 +11,7 @@ Steps to run this pipeline:
   3. Clone this repository into your project directory using `git clone`.
   4. Update the `nextflow.config` file to represent your project requirements. Required paramaters to change are flagged.
   5. Extract the `.fast5` files into the `01_Raw_Input` directory.
-  6. Run the pipeline using `qsub Nextflow_Submit`. 
+  6. Run the pipeline using `qsub Nextflow_Submit.sh`. 
 
 The help message from the nextflow scripts is below:
 ```
