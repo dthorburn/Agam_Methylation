@@ -14,6 +14,8 @@ Steps to run this pipeline:
 
 If you are not using a PBS job submission system, you'll need to update all the scripts to reflect the job submission system. See [Nextflow doucmentation](https://www.nextflow.io/docs/latest/executor.html) for help. 
 
+**Important:** for some reason all files have to be in live, and not ephemeral on Imperial HPC. Unsure why, but nextflow fails to load the data correctly and will throw errors if you have the guppy input there.  
+
 The help message from the nextflow script is below:
 ```
 Usage:
