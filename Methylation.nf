@@ -3,7 +3,7 @@
 /*
  *  Pipeline developed for methylation calls of Oxford Nanopore reads. 
  *  Author: Miles Thorburn <d.thorburn@imperial.ac.uk>
- *  Date last modified: 10/03/2022
+ *  Date last modified: 21/03/2022
  */
 
                                                             // ========================================================
@@ -94,7 +94,7 @@ Results               : ${PWD}/03_Results
                                                             // Setting the value channels (can be read unlimited times)
                                                             // ========================================================
 Gup_container = file( params.Container, checkIfExists: true )
-run_id = Channel.value( params.RunID )
+run_id = Channel.value( "${params.RunID}" )
 ref_genome = file( params.RefGen, checkIfExists: true )
 ref_name   = ref_genome.getBaseName()
 ref_dir    = ref_genome.getParent()
@@ -227,7 +227,6 @@ if (params.Skip_Index == false) {
   }
   // This changes the single emission of all the files into individual files to be processed.
   bams_ch = all_bams1
-              .map { file -> tuple(file.baseName.replaceAll("^.*_", "").replaceAll(".fast5", ""), file) }
               .flatMap()  
 
   process IndexBams {
@@ -238,8 +237,6 @@ if (params.Skip_Index == false) {
     executor = 'pbspro'
     clusterOptions = "-lselect=1:ncpus=${params.Index_threads}:mem=${params.Index_memory}gb -lwalltime=${params.Index_walltime}:00:00"
     
-    tag { chunk }
-
     publishDir(
       path: "${params.GuppyDir}",
       mode: 'copy',
@@ -248,7 +245,7 @@ if (params.Skip_Index == false) {
     beforeScript 'module load samtools/1.2'
 
     input: 
-    set chunk, path(queryBam) from bams_ch
+    set path(queryBam) from bams_ch
     
     output:
     path("*.bai") into bais_ch
@@ -273,7 +270,7 @@ if (params.Skip_Processing == false) {
     Channel
       .fromPath("${params.GuppyDir}/*.bai")
       .ifEmpty { error "No bais found in ${params.GuppyDir}" }
-      .set { bams_ch }
+      .set { bais_ch }
   }
 
   process ProcBams {
@@ -294,7 +291,7 @@ if (params.Skip_Processing == false) {
 
     input:
     // Needs the declaration block to be all the bams at the same time. 
-    path bams from all_bams2
+    path bams from all_bams2.collect()
     path bais from bais_ch.collect()
     path ref_genome
     val run_id
@@ -303,8 +300,9 @@ if (params.Skip_Processing == false) {
     path "${run_id}.cpg.bam"
     
     script:
+    def all_bams = bams.collect{ "$it" }.join(' ')
     """
-    modbam2bed -e -m ${params.P3_modType} --cpg -t ${params.P3_threads} ${ref_genome} ${bams} > ${run_id}.cpg.bam
+    modbam2bed -e -m ${params.BP_modType} --cpg -t ${params.BP_threads} ${ref_genome} ${all_bams} > ${run_id}.cpg.bam
     """
   }
 }
