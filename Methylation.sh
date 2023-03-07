@@ -9,8 +9,13 @@ cd $Project_Dir
 
 module load nextflow/20.10.0
 
-echo "Starting:`date`"
+case $1 in
+ -[h?] | --help)
+	nextflow run Methylation.nf -c Methylation.config --help
+	exit 0;;
+esac
 
+echo "Starting:`date`"
 nextflow run Methylation.nf \
 	-c Methylation.config \
 	--profile imperial \
