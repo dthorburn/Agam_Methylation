@@ -49,6 +49,3 @@ Usage:
     --Skip_Index                                   Skip indexing output bams
     --Skip_Processing                              Skip processing output bams 
 ```
-
-## Consensus Approach (*Under development*)
-I am using the consensus framework for methylation calling developed into the [METEORE](https://github.com/comprna/METEORE) tool. The nextflow pipeline will be paramaterised to run on the Imperial HPC (psbpro), and will leverage the calls from both ONT-Guppy and [ONT-Megalodon](https://github.com/nanoporetech/megalodon) to create a more robust consensus call when compared to the single caller output above.
